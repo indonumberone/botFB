@@ -45,16 +45,16 @@ login(
                   );
                 });
               break;
-            case `gpt ${event.body}`:
+            case `ip`:
               {
+                axios.get(`https://api.myip.com`).then(({ data }) => {
+                  let ip = `IP ADREESS BOT : ${data.ip}\nCOUNTRY BOT : ${data.country}`;
+                  api.sendMessage(ip, event.threadID);
+                });
               }
               break;
             default:
-              let jnck = axios
-                .get("https://api.akuari.my.id/ai/gpt?chat=" + event.body)
-                .then(({ data }) => {
-                  api.sendMessage(data.respon, event.threadID);
-                });
+              api.sendMessage("hallo", event.threadID);
               break;
           }
           break;
