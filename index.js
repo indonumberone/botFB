@@ -1,6 +1,6 @@
-const fs = require("fs");
-const login = require("unofficial-fb-chat-api");
-const { handleCommand } = require("./command"); // Import the commands module
+import fs from "fs";
+import login from "unofficial-fb-chat-api";
+import { handleCommand } from "./command.js"; // Import the commands module
 
 login(
   { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },

@@ -1,6 +1,6 @@
 // commands.js
 
-const axios = require("axios");
+import axios from "axios";
 
 const commandHandlers = {
   start: (api, event) => {
@@ -12,7 +12,7 @@ const commandHandlers = {
   },
   pict: (api, event) => {
     const msg = {
-      url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
+      url: "https://rare-gallery.com/thumbs/1195058-anime-girls-pic   ture-in-picture-Hyouka-Chitanda-Eru.jpg",
     };
     api.sendMessage(msg, event.threadID);
   },
@@ -46,7 +46,7 @@ const commandHandlers = {
   },
 };
 
-function handleCommand(api, event) {
+export function handleCommand(api, event) {
   const message = event.body.trim();
   const commands = {
     "/start": "start",
@@ -67,7 +67,3 @@ function handleCommand(api, event) {
 
   api.sendMessage("hallo", event.threadID);
 }
-
-module.exports = {
-  handleCommand,
-};
