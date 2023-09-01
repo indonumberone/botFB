@@ -2,8 +2,11 @@ const fs = require("fs");
 const login = require("unofficial-fb-chat-api");
 const axios = require("axios");
 
-// Simple echo bot. It will repeat everything that you say.
-// Will stop when you say '/stop'
+// Fungsi untuk mengecek apakah pesan dimulai dengan prefix
+function startsWithPrefix(text, prefix) {
+  return text.startsWith(prefix);
+}
+
 login(
   { appState: JSON.parse(fs.readFileSync("appstate.json", "utf8")) },
   (err, api) => {
@@ -20,42 +23,47 @@ login(
 
       switch (event.type) {
         case "message":
-          switch (event.body) {
-            case "stop":
-              api.sendMessage("Goodbye…", event.threadID);
-              return stopListening();
-              break;
-            case "start":
-              api.sendMessage("Starting...", event.threadID);
-              break;
-            case "pict":
-              var msg = {
-                url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
-              };
+          const body = event.body;
 
-              api.sendMessage(msg, event.threadID);
-              break;
-            case `gpt ${event.body}`:
-              let gpt = axios
-                .get("https://api.akuari.my.id/ai/gpt?chat=" + event.body)
-                .then(({ data }) => {
-                  api.sendMessage(
-                    "jadiiiii....." + data.respon,
-                    event.threadID
-                  );
-                });
-              break;
-            case `ip`:
-              {
-                axios.get(`https://api.myip.com`).then(({ data }) => {
-                  let ip = `IP ADREESS BOT : ${data.ip}\nCOUNTRY BOT : ${data.country}`;
-                  api.sendMessage(ip, event.threadID);
-                });
-              }
-              break;
-            default:
-              api.sendMessage("hallo", event.threadID);
-              break;
+          if (startsWithPrefix(body, "/")) {
+            const command = body.substring(1); // Remove the prefix '/'
+            switch (command) {
+              case "stop":
+                api.sendMessage("Goodbye…", event.threadID);
+                return stopListening();
+              case "start":
+                api.sendMessage("Starting...", event.threadID);
+                break;
+              case "pict":
+                var msg = {
+                  url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
+                };
+                api.sendMessage(msg, event.threadID);
+                break;
+              // Add other commands here...
+              default:
+                api.sendMessage("Unknown command", event.threadID);
+                break;
+            }
+          } else if (startsWithPrefix(body, "gpt ")) {
+            const gptQuery = body.substring(4); // Remove the prefix 'gpt '
+            axios
+              .get("https://api.akuari.my.id/ai/gpt?chat=" + gptQuery)
+              .then(({ data }) => {
+                api.sendMessage("jadiiiii....." + data.respon, event.threadID);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          } else if (startsWithPrefix(body, "ip")) {
+            axios.get(`https://api.myip.com`).then(({ data }) => {
+              let ip = `IP ADDRESS BOT: ${data.ip}\nCOUNTRY BOT: ${data.country}`;
+              console.log(data);
+              api.sendMessage(ip, event.threadID);
+            });
+          } else {
+            api.sendMessage("hallo", event.threadID);
+            //abc
           }
           break;
         case "event":
