@@ -1,6 +1,12 @@
 // commands.js
 
 import axios from "axios";
+import fs from "fs";
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { sendFile } from "./utils/upload.js";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const commandHandlers = {
   start: (api, event) => {
@@ -11,10 +17,19 @@ const commandHandlers = {
     stopListening(); // Assuming `stopListening` is defined in your main cskkkdjode.
   },
   pict: (api, event) => {
-    const msg = {
-      url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
-    };
+    const filenames = "abc.jpg"
+    const fullpath = fs.createReadStream(`${dirname}/${filenames}`);
+        const msg = {
+        "body": "123",
+        "attachment": fullpath
+    }
+    // const msg = {
+    //   url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
+    // };
     api.sendMessage(msg, event.threadID);
+  },
+  send: (api, event, args) => {
+    sendFile(api, event, args, "tes", `../tmp/${event.threadID}.jpg`)
   },
   gpt: (api, event, args) => {
     axios
@@ -55,6 +70,7 @@ export function handleCommand(api, event) {
     "/gpt": "gpt",
     "/ip": "ip",
     "/save": "save",
+    "/send": "send",
   };
 
   for (const [command, handler] of Object.entries(commands)) {

@@ -12,9 +12,9 @@ login(
     var stopListening = api.listen((err, event) => {
       if (err) return console.error(err);
 
-      api.markAsRead(event.threadID, (err) => {
-        if (err) console.error(err);
-      });
+      // api.markAsRead(event.threadID, (err) => {
+      //   if (err) console.error(err);
+      // });
 
       if (event.type === "message") {
         handleCommand(api, event); // Call the handleCommand function from commands.js
