@@ -8,11 +8,11 @@ const commandHandlers = {
   },
   stop: (api, event) => {
     api.sendMessage("Goodbye...", event.threadID);
-    stopListening(); // Assuming `stopListening` is defined in your main code.
+    stopListening(); // Assuming `stopListening` is defined in your main cskkkdjode.
   },
   pict: (api, event) => {
     const msg = {
-      url: "https://rare-gallery.com/thumbs/1195058-anime-girls-pic   ture-in-picture-Hyouka-Chitanda-Eru.jpg",
+      url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
     };
     api.sendMessage(msg, event.threadID);
   },
