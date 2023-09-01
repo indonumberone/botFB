@@ -12,6 +12,7 @@ login(
     var stopListening = api.listen((err, event) => {
       if (err) return console.error(err);
 
+      // console.log(event)
       // api.markAsRead(event.threadID, (err) => {
       //   if (err) console.error(err);
       // });

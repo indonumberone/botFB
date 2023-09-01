@@ -44,6 +44,15 @@ const commandHandlers = {
       api.sendMessage(ip, event.threadID);
     });
   },
+  id: (api, event) => {
+    api.sendMessage(event.messageID, event.threadID, (err, messageInfo) => {
+      if (err) {
+        console.log(err)
+      } else {
+        api.sendMessage("test", event.threadID, {}, event.messageID)
+      }
+    })
+  },
   save: (api, event, args) => {
     const [number, name] = args.split(" ");
 
@@ -71,6 +80,7 @@ export function handleCommand(api, event) {
     "/ip": "ip",
     "/save": "save",
     "/send": "send",
+    "/id": "id",
   };
 
   for (const [command, handler] of Object.entries(commands)) {
@@ -81,5 +91,11 @@ export function handleCommand(api, event) {
     }
   }
 
-  api.sendMessage("hallo", event.threadID);
+  api.sendMessage("hallo 3", event.threadID, (err, messageInfo) => {
+    if (err) {
+      console.log(err)
+    } else {
+      console.log(messageInfo)
+    }
+  }, 'mid.$cAABtDsP0RgmQgrBW5GKUWsMeUORR');
 }
