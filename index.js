@@ -4,7 +4,7 @@ const axios = require("axios");
 
 // Fungsi untuk mengecek apakah pesan dimulai dengan prefix
 function startsWithPrefix(text, prefix) {
-  return text.startsWith(prefix);
+  console.log(text.startsWith(prefix));
 }
 
 login(
@@ -43,10 +43,12 @@ login(
               // Add other commands here...
               default:
                 api.sendMessage("Unknown command", event.threadID);
+                console.error(body);
                 break;
             }
           } else if (startsWithPrefix(body, "gpt ")) {
             const gptQuery = body.substring(4); // Remove the prefix 'gpt '
+            console.log(gptQuery);
             axios
               .get("https://api.akuari.my.id/ai/gpt?chat=" + gptQuery)
               .then(({ data }) => {
