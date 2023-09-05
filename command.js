@@ -2,8 +2,8 @@
 
 import axios from "axios";
 import fs from "fs";
-import { fileURLToPath } from 'url';
-import path from 'path';
+import { fileURLToPath } from "url";
+import path from "path";
 import { sendFile } from "./utils/upload.js";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -17,25 +17,27 @@ const commandHandlers = {
     stopListening(); // Assuming `stopListening` is defined in your main cskkkdjode.
   },
   pict: (api, event) => {
-    const filenames = "abc.jpg"
+    const filenames = "abc.jpg";
     const fullpath = fs.createReadStream(`${dirname}/${filenames}`);
-        const msg = {
-        "body": "123",
-        "attachment": fullpath
-    }
+    const msg = {
+      body: "123",
+      attachment: fullpath,
+    };
     // const msg = {
     //   url: "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg",
     // };
     api.sendMessage(msg, event.threadID);
   },
   send: (api, event, args) => {
-    sendFile(api, event, args, "tes", `../tmp/${event.threadID}.jpg`)
+    sendFile(api, event, args, "tes", `../tmp/${event.threadID}.jpg`);
   },
-  gpt: (api, event, args) => {
+  ai: (api, event, args) => {
     axios
-      .get("https://api.akuari.my.id/ai/gpt?chat=" + args)
+      .get("https://vihangayt.me/tools/chatgpt?q=" + args)
       .then(({ data }) => {
-        api.sendMessage(data.respon, event.threadID);
+        let gpt = data.data;
+        api.sendMessage(gpt, event.threadID);
+        console.log(gpt);
       });
   },
   ip: (api, event) => {
@@ -47,11 +49,11 @@ const commandHandlers = {
   id: (api, event) => {
     api.sendMessage(event.messageID, event.threadID, (err, messageInfo) => {
       if (err) {
-        console.log(err)
+        console.log(err);
       } else {
-        api.sendMessage("test", event.threadID, {}, event.messageID)
+        api.sendMessage("test", event.threadID, {}, event.messageID);
       }
-    })
+    });
   },
   save: (api, event, args) => {
     const [number, name] = args.split(" ");
@@ -76,7 +78,7 @@ export function handleCommand(api, event) {
     "/start": "start",
     "/stop": "stop",
     "/pict": "pict",
-    "/gpt": "gpt",
+    "/ai": "ai",
     "/ip": "ip",
     "/save": "save",
     "/send": "send",
@@ -91,11 +93,16 @@ export function handleCommand(api, event) {
     }
   }
 
-  api.sendMessage("hallo 3", event.threadID, (err, messageInfo) => {
-    if (err) {
-      console.log(err)
-    } else {
-      console.log(messageInfo)
-    }
-  }, 'mid.$cAABtDsP0RgmQgrBW5GKUWsMeUORR');
+  api.sendMessage(
+    "hallo 3",
+    event.threadID,
+    (err, messageInfo) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(messageInfo);
+      }
+    },
+    "mid.$cAABtDsP0RgmQgrBW5GKUWsMeUORR"
+  );
 }
