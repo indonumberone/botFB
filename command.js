@@ -2,15 +2,13 @@
 
 import axios from "axios";
 import fs from "fs";
-import { fileURLToPath } from "url";
+import { fileURLToPath, urlToHttpOptions } from "url";
 import path from "path";
 import { sendFile } from "./utils/upload.js";
-
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const commandHandlers = {
   start: (api, event) => {
-    api.sendMessage("Starting...", event.threadID);
   },
   stop: (api, event) => {
     api.sendMessage("Goodbye...", event.threadID);
@@ -18,7 +16,9 @@ const commandHandlers = {
   },
   pict: (api, event) => {
     const filenames = "abc.jpg";
-    const fullpath = fs.createReadStream(`${dirname}/${filenames}`);
+    const fullpath = fs.createReadStream(
+      "https://rare-gallery.com/thumbs/1195058-anime-girls-picture-in-picture-Hyouka-Chitanda-Eru.jpg"
+    );
     const msg = {
       body: "123",
       attachment: fullpath,
@@ -46,6 +46,21 @@ const commandHandlers = {
       api.sendMessage(ip, event.threadID);
     });
   },
+  tiktok: (api, event, args) => {
+    axios
+      .get("https://api.akuari.my.id/downloader/tiktok2?link=" + args)
+      .then(({ data }) => {
+        let tt = data.respon.video.no_watermark_hd;
+
+        console.log(tt);
+        console.log(data);
+        sendFile(api, event, tt, "NYOHHHH", `../tmp/${event.threadID}.mp4`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
+
   id: (api, event) => {
     api.sendMessage(event.messageID, event.threadID, (err, messageInfo) => {
       if (err) {
@@ -83,6 +98,7 @@ export function handleCommand(api, event) {
     "/save": "save",
     "/send": "send",
     "/id": "id",
+    "/tiktok": "tiktok",
   };
 
   for (const [command, handler] of Object.entries(commands)) {
