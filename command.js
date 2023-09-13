@@ -8,8 +8,7 @@ import { sendFile } from "./utils/upload.js";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const commandHandlers = {
-  start: (api, event) => {
-  },
+  start: (api, event) => {},
   stop: (api, event) => {
     api.sendMessage("Goodbye...", event.threadID);
     stopListening(); // Assuming `stopListening` is defined in your main cskkkdjode.
@@ -54,7 +53,13 @@ const commandHandlers = {
 
         console.log(tt);
         console.log(data);
-        sendFile(api, event, tt, "NYOHHHH", `../tmp/${event.threadID}.mp4`);
+        sendFile(
+          api,
+          event,
+          tt,
+          "NYOHHHH",
+          `../tmp/${event.threadID}${data.respon.author.unique_id}.mp4`
+        );
       })
       .catch((err) => {
         console.log(err);
