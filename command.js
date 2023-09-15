@@ -30,6 +30,58 @@ const commandHandlers = {
   send: (api, event, args) => {
     sendFile(api, event, args, "tes", `../tmp/${event.threadID}.jpg`);
   },
+  help: (api, event) => {
+    let menu = `
+start
+stop
+pict
+ai
+ip
+save
+send
+id
+tiktok
+ig
+fb
+ytmp4
+    `;
+    api.sendMessage(menu, event.threadID);
+  },
+  fb: (api, event, args) => {
+    axios
+      .get("https://vihangayt.me/download/fb?url=" + args)
+      .then(({ data }) => {
+        let fb = data.data.download[0].url;
+        let quality = data.data.download[0].quality;
+        console.log(fb, quality);
+        sendFile(api, event, fb, quality, `../tmp/${event.threadID}.mp4`);
+      });
+  },
+  ytmp4: (api, event, args) => {
+    axios
+      .get("https://vihangayt.me/download/ytmp4?url=" + args)
+      .then(({ data }) => {
+        let yt = data.data.vid_720p;
+        let thumbnail = data.data.thumbnail;
+        sendFile(
+          api,
+          event,
+          thumbnail,
+          "MOHON DI TUNGGU",
+          `../tmp/${event.threadID}thumb.jpg`
+        );
+        sendFile(api, event, yt, "MONGGO", `../tmp/${event.threadID}.mp4`);
+      });
+  },
+  ig: (api, event, args) => {
+    axios
+      .get("https://vihangayt.me/download/instagram?url=" + args)
+      .then(({ data }) => {
+        let ig = data.data.data[0].url;
+        console.log(ig);
+        sendFile(api, event, ig, "MONGGO", `../tmp/${event.threadID}.mp4`);
+      });
+  },
   ai: (api, event, args) => {
     axios
       .get("https://vihangayt.me/tools/chatgpt?q=" + args)
@@ -104,6 +156,10 @@ export function handleCommand(api, event) {
     "/send": "send",
     "/id": "id",
     "/tiktok": "tiktok",
+    "/help": "help",
+    "/ig": "ig",
+    "/fb": "fb",
+    "/ytmp4": "ytmp4",
   };
 
   for (const [command, handler] of Object.entries(commands)) {
